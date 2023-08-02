@@ -72,6 +72,9 @@ def set_highscore(score, high_score):
 
 pygame.init()
 screen = pygame.display.set_mode((432, 768))
+pygame.display.set_caption('Flappy Bird')
+icon = pygame.image.load('assests/yellowbird-midflap.png')
+pygame.display.set_icon(icon)
 
 # FPS
 clock = pygame.time.Clock()
