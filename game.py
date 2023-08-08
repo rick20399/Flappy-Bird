@@ -1,4 +1,7 @@
-import pygame, sys, container, helper
+import container
+import helper
+import pygame
+import sys
 
 pygame.init()
 screen = pygame.display.set_mode((432, 768))
@@ -10,6 +13,7 @@ pygame.display.set_icon(icon)
 clock = pygame.time.Clock()
 
 game_font = pygame.font.Font(container.font, 40)
+tmpScore = 0
 score = 0
 high_score = 0
 
@@ -27,12 +31,9 @@ floor = pygame.transform.scale2x(floor)
 floor_x_pos = 0
 
 # Bird
-bird_down = pygame.image.load(container.downFlap).convert_alpha()
-bird_down = pygame.transform.scale2x(bird_down)
-bird_mid = pygame.image.load(container.midFlap).convert_alpha()
-bird_mid = pygame.transform.scale2x(bird_mid)
-bird_up = pygame.image.load(container.upFlap).convert_alpha()
-bird_up = pygame.transform.scale2x(bird_up)
+bird_down = pygame.transform.scale2x(pygame.image.load(container.downFlap).convert_alpha())
+bird_mid = pygame.transform.scale2x(pygame.image.load(container.midFlap).convert_alpha())
+bird_up = pygame.transform.scale2x(pygame.image.load(container.upFlap).convert_alpha())
 bird_list = [bird_down, bird_mid, bird_up]
 bird_index = 0
 bird = bird_list[bird_index]
@@ -44,7 +45,7 @@ pygame.time.set_timer(bird_flap, 200)
 pipe_surface = pygame.image.load(container.pipe).convert_alpha()
 pipe_surface = pygame.transform.scale2x(pipe_surface)
 pipe_list = []
-pipe_height = [250, 300, 350]
+pipe_height = [250, 280, 310, 340, 370, 400]
 
 # Timer
 spawn_pipe = pygame.USEREVENT
@@ -69,9 +70,11 @@ while True:
                 pipe_list.clear()
                 bird_rect.center = (100, 384)
                 bird_movement = 0
+                tmpScore = 0
                 score = 0
         if event.type == spawn_pipe:
             pipe_list.extend(helper.create_pipe(pipe_surface, pipe_height))
+            tmpScore += 1
         if event.type == bird_flap:
             if bird_index < 2:
                 bird_index += 1
@@ -91,7 +94,8 @@ while True:
 
         pipe_list = helper.move_pipe(pipe_list)
         helper.draw_pipe(screen, pipe_list, pipe_surface)
-        score += 0.01
+        if tmpScore > 1:
+            score = tmpScore - 1
 
         helper.score_display(screen, container.mainGame, game_font, score, high_score)
     else:

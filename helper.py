@@ -1,4 +1,5 @@
-import random, pygame
+import pygame
+import random
 
 import container
 
